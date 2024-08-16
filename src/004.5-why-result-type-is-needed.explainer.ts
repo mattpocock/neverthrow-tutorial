@@ -1,7 +1,7 @@
-import { err, ok, Result } from "neverthrow";
+import { Err, err, ok, Result } from "neverthrow";
 import { expect, it, vitest } from "vitest";
 
-const jsonParse = (input: string): Result<any, SyntaxError> => {
+const jsonParse = (input: string) => {
   try {
     return ok(JSON.parse(input));
   } catch (error) {
