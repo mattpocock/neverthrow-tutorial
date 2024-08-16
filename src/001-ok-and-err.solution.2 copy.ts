@@ -2,7 +2,7 @@ import { err, ok, Result } from "neverthrow";
 import { expect, it } from "vitest";
 import { Expect, Equal } from "@total-typescript/helpers";
 
-const jsonParse = (input: string): Result<string, SyntaxError> => {
+const jsonParse = (input: string): Result<any, SyntaxError> => {
   try {
     return ok(JSON.parse(input));
   } catch (error) {

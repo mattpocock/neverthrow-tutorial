@@ -1,7 +1,7 @@
-import { Err, err, ok, Result } from "neverthrow";
+import { err, ok } from "neverthrow";
 import { expect, it, vitest } from "vitest";
 
-const jsonParse = (input: string): Result<any, SyntaxError> => {
+const jsonParse = (input: string) => {
   try {
     return ok(JSON.parse(input));
   } catch (error) {
@@ -12,7 +12,7 @@ const jsonParse = (input: string): Result<any, SyntaxError> => {
   }
 };
 
-const checkForId = (data: any): Result<{ id: string }, Error> => {
+const checkForId = (data: any) => {
   if (!data.id) {
     return err(new Error("No id found"));
   }
