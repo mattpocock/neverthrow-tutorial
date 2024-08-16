@@ -1,0 +1,39 @@
+name: Renovate Checks
+on:
+  push:
+    branches:
+      - "renovate/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Checkout Main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: repo
+
+      - name: Install Dependencies in Main
+        run: (cd repo && pnpm install)
+      - name: Create Snapshot In Main
+        run: (cd repo && npx tt-cli take-snapshot ./snap.md)
+      - name: Copy Snapshot To Outer Directory
+        run: mv repo/snap.md ./snap.md
+      - name: Delete Main Directory
+        run: rm -rf repo
+      - name: Checkout Branch
+        uses: actions/checkout@v4
+        with:
+          path: repo
+      - name: Install Dependencies in Branch
+        run: (cd repo && pnpm install)
+      - name: Move Snapshot To Branch
+        run: mv ./snap.md repo/snap.md
+      - name: Compare Snapshot In Branch
+        run: (cd repo && npx tt-cli compare-snapshot ./snap.md)
