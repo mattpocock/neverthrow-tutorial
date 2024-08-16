@@ -1,7 +1,7 @@
-import { err, ok, Result } from "neverthrow";
+import { err, ok } from "neverthrow";
 import { expect, it, vitest } from "vitest";
 
-const jsonParse = (input: string): Result<any, SyntaxError> => {
+const jsonParse = (input: string) => {
   try {
     return ok(JSON.parse(input));
   } catch (error) {
@@ -18,13 +18,13 @@ const handleRequest = (
   },
   res: (status: number, message: string) => void,
 ) => {
-  jsonParse(req.body)
-    .map((data) => {
-      res(200, data.id);
-    })
-    .mapErr((err) => {
-      res(400, err.message);
-    });
+  const result = jsonParse(req.body);
+
+  if (result.isOk()) {
+    res(200, result.value.id);
+  } else {
+    res(400, result.error.message);
+  }
 };
 
 it("Should return the id if the JSON is valid", () => {
